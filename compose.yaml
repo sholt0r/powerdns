@@ -19,3 +19,21 @@ services:
       - 53:53
       - 53:53/udp
       - 8081:8081
+
+  pdns:
+    container_name: pdns
+    restart: unless-stopped
+    image: powerdnsadmin/pda-legacy:latest
+    env_file:
+      - .env
+    environment:
+      SECRET_KEY: ${PDNS_AUTH_API_KEY}
+    networks:
+      traefik:
+    expose: 9191
+    labels:
+      traefik.enable: true
+      traefik.http.routers.pdns.tls: true
+      traefik.http.routers.pdns.tls.certresolver: production
+      traefik.http.routers.pdns.service: pdns
+      traefik.http.services.pdns.loadbalancer.server.port: 9191
