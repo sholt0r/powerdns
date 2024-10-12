@@ -31,10 +31,8 @@ services:
     networks:
       traefik:
     expose: 
-      - 9191
+      - 80
     labels:
       traefik.enable: true
       traefik.http.routers.pdns.tls: true
       traefik.http.routers.pdns.tls.certresolver: production
-      traefik.http.routers.pdns.service: pdns
-      traefik.http.services.pdns.loadbalancer.server.port: 9191
