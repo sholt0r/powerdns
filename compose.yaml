@@ -1,0 +1,21 @@
+networks:
+  pdns:
+    name: pdns
+    driver: bridge
+  traefik:
+    name: traefik
+    external: true
+
+services:
+  pdns_auth:
+    container_name: pdns_auth
+    restart: unless-stopped
+    image: powerdns/pdns-auth-49
+    env_file:
+      - .env
+    networks:
+      pdns:
+    ports:
+      - 53:53
+      - 53:53/udp
+      - 8081:8081
