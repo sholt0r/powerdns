@@ -31,11 +31,25 @@ services:
     expose: 
       - 80
     environment:
-      - SQLALCHEMY_DATABASE_URI=mysql://pda:changeme@host.docker.internal/pda
-      - GUNICORN_TIMEOUT=60
-      - GUNICORN_WORKERS=2
-      - GUNICORN_LOGLEVEL=DEBUG
+      SQLALCHEMY_DATABASE_URI: postgresql://pda:${SQLA_DB_PASSWORD}@pdns-admin-pgsql/pda
+      GUNICORN_TIMEOUT: 60
+      GUNICORN_WORKERS: 2
+      GUNICORN_LOGLEVEL: DEBUG
     labels:
       traefik.enable: true
       traefik.http.routers.pdns.tls: true
       traefik.http.routers.pdns.tls.certresolver: production
+
+  powerdns-admin-pgsql:
+    container_name: pdns-admin-pgsql
+    env_file:
+      - .env
+    environment:
+      BIND_ADDRESS: 0.0.0.0
+      PORT: 9191
+      SQLA_DB_USER: pda
+      SQLA_DB_HOST: 127.0.0.1
+      SQLA_DB_NAME: pda
+    volumes:
+        - /data/node_modules:/var/www/powerdns-admin/node_modules
+    image: ixpict/powerdns-admin-pgsql:latest
