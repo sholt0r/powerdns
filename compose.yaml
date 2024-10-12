@@ -30,7 +30,8 @@ services:
       SECRET_KEY: ${PDNS_AUTH_API_KEY}
     networks:
       traefik:
-    expose: 9191
+    expose: 
+      - 9191
     labels:
       traefik.enable: true
       traefik.http.routers.pdns.tls: true
