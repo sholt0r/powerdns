@@ -26,12 +26,15 @@ services:
     image: powerdnsadmin/pda-legacy:latest
     env_file:
       - .env
-    environment:
-      SECRET_KEY: ${PDNS_AUTH_API_KEY}
     networks:
       traefik:
     expose: 
       - 80
+    environment:
+      - SQLALCHEMY_DATABASE_URI=mysql://pda:changeme@host.docker.internal/pda
+      - GUNICORN_TIMEOUT=60
+      - GUNICORN_WORKERS=2
+      - GUNICORN_LOGLEVEL=DEBUG
     labels:
       traefik.enable: true
       traefik.http.routers.pdns.tls: true
