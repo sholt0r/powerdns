@@ -36,3 +36,8 @@ services:
       traefik.enable: true
       traefik.http.routers.pdns.tls: true
       traefik.http.routers.pdns.tls.certresolver: production
+
+  volumes:
+    pda-data:
+      external: true
+      name: pda-data
