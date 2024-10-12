@@ -31,7 +31,7 @@ services:
     expose: 
       - 80
     environment:
-      SQLALCHEMY_DATABASE_URI: postgresql://pda:${SQLA_DB_PASSWORD}@pdns-admin-pgsql/pda
+      SQLALCHEMY_DATABASE_URI: postgresql://pda:${SQLA_DB_PASSWORD}@pdns-admin-pgsql:9191/pda
       GUNICORN_TIMEOUT: 60
       GUNICORN_WORKERS: 2
       GUNICORN_LOGLEVEL: DEBUG
@@ -40,8 +40,10 @@ services:
       traefik.http.routers.pdns.tls: true
       traefik.http.routers.pdns.tls.certresolver: production
 
-  powerdns-admin-pgsql:
+  pdns-admin-pgsql:
     container_name: pdns-admin-pgsql
+    restart: unless-stopped
+    image: ixpict/powerdns-admin-pgsql:latest
     env_file:
       - .env
     environment:
@@ -50,6 +52,7 @@ services:
       SQLA_DB_USER: pda
       SQLA_DB_HOST: 127.0.0.1
       SQLA_DB_NAME: pda
+    expose:
+      - 9191
     volumes:
         - /data/node_modules:/var/www/powerdns-admin/node_modules
-    image: ixpict/powerdns-admin-pgsql:latest
